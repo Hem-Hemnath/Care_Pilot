@@ -7,7 +7,7 @@
 - **Team name:** _ The Avengers
 - **Team code:** _ TEAM-102
 - **Track:**  AI for Good Health & Well-being 
-- **Members:** _SRINATH (GitHub - Srinathsenthilkumar), SARUGESHWARAN (GitHub - sarugeshwaran),MYVILIKANNAN ( GitHub - myvilikannan-007), HEMNATH ( github - Hem-hemnath)
+- **Members:** _SRINATH (GitHub - Srinathsenthilkumar), SARUGESHWARAN (GitHub - sarugeshwaran),MYVILIKANNAN ( GitHub - myvilikannan-007), HEMNATH ( Github - Hem-hemnath)
 
 ## 1. Problem
 Mrs. Lakshmi, a 48-year-old homemaker from Coimbatore, is the primary caregiver for her 74-year-old mother, who takes medicines for diabetes, hypertension, and thyroid disease. She manages multiple medicine strips every day, but after medicines are removed from their original boxes, the strips often get mixed together. When she encounters an unfamiliar tablet or medicine strip, she is unsure of its name or purpose.
