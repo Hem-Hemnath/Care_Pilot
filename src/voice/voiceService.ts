@@ -32,6 +32,27 @@ declare global {
   interface Window {
     SpeechRecognition?: new () => SpeechRecognitionLike
     webkitSpeechRecognition?: new () => SpeechRecognitionLike
+    mozSpeechRecognition?: new () => SpeechRecognitionLike
+    msSpeechRecognition?: new () => SpeechRecognitionLike
+  }
+}
+
+/**
+ * Dedicated helper to explicitly request microphone permission from the browser.
+ * Stops temporary stream tracks immediately after permission is granted.
+ */
+export async function requestMicrophoneAccess(): Promise<boolean> {
+  if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
+    return false
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    // Stop the temporary stream tracks immediately after permission is granted
+    stream.getTracks().forEach((track) => track.stop())
+    return true
+  } catch (err) {
+    console.error("Microphone permission denied or unavailable:", err)
+    return false
   }
 }
 
@@ -42,11 +63,18 @@ export class VoiceService {
   private _isListening = false
 
   isSupported(): boolean {
+    if (typeof window === 'undefined') return false
     return !!(
       window.SpeechRecognition ||
       window.webkitSpeechRecognition ||
+      window.mozSpeechRecognition ||
+      window.msSpeechRecognition ||
       (typeof navigator !== 'undefined' && typeof navigator.mediaDevices?.getUserMedia === 'function' && typeof MediaRecorder !== 'undefined')
     )
+  }
+
+  async requestMicrophoneAccess(): Promise<boolean> {
+    return requestMicrophoneAccess()
   }
 
   private stopMicStream() {
@@ -74,8 +102,19 @@ export class VoiceService {
 
     if (this._isListening) this.stopListening()
 
-    // Try Web Speech API first
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition
+    // 1. Explicit Microphone Permission Request
+    const hasMicPermission = await requestMicrophoneAccess()
+    if (!hasMicPermission) {
+      onError('PERMISSION_DENIED', 'PERMISSION_DENIED')
+      return
+    }
+
+    // 2. Vendor Prefixes for Web Speech API
+    const SpeechRec =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition ||
+      window.mozSpeechRecognition ||
+      window.msSpeechRecognition
 
     if (SpeechRec) {
       try {
@@ -150,7 +189,7 @@ export class VoiceService {
       }
     }
 
-    // MediaRecorder Fallback if WebSpeech is not available or throws error
+    // 3. MediaRecorder Fallback if WebSpeech is not available or throws error
     if (typeof navigator.mediaDevices?.getUserMedia === 'function' && typeof MediaRecorder !== 'undefined') {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
