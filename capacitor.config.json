@@ -1,0 +1,18 @@
+﻿{
+  "appId": "com.carepilot.app",
+  "appName": "CarePilot",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0ea5e9",
+      "showSpinner": false
+    },
+    "Camera": {
+      "permissions": ["camera"]
+    }
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

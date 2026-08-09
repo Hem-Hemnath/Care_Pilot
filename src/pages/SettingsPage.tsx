@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Settings, Sun, Moon, Monitor, Globe } from "lucide-react";
 import { useApp } from "../hooks/useApp";
 import { t } from "../i18n";
@@ -49,7 +49,6 @@ export function SettingsPage() {
   const langOptions = [
     { value: "en", label: "English", icon: <Globe size={14} /> },
     { value: "ta", label: "தமிழ்", icon: <Globe size={14} /> },
-    { value: "tanglish", label: "Tanglish", icon: <Globe size={14} /> },
   ];
 
   const themeOptions = [

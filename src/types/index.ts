@@ -41,7 +41,7 @@ export interface HistoryEntry {
 }
 
 // Language
-export type Language = 'en' | 'ta' | 'tanglish'
+export type Language = 'en' | 'ta'
 
 // Theme
 export type Theme = 'light' | 'dark' | 'system'

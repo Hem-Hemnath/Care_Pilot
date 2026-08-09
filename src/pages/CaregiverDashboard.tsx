@@ -13,6 +13,7 @@ import { voiceService } from '../voice/voiceService'
 import { askAboutMedicine, identifyMedicineFromText } from '../ai/geminiService'
 import { GlassDropdown } from '../components/ui/GlassDropdown'
 import { cabinetMedicineToMedicineRecord } from '../utils/medicineAdapter'
+import { Disclaimer } from '../components/Disclaimer'
 import type { CabinetMedicine, SafetyCheckResult, ChatMessage, MedicineRecord } from '../types'
 
 export function CaregiverDashboard() {
@@ -189,7 +190,7 @@ export function CaregiverDashboard() {
             <h3>{t('safetyAlertsDetected', uiLang, { count: warningCount })}</h3>
             <p>{t('safetyAlertDetail', uiLang, { name: activePatient?.name || '' })}</p>
           </div>
-          <Link to="/safety" className="alert-btn">{t('viewWarnings', uiLang)}</Link>
+          <Link to="/caregiver/medicine-cabinet" className="alert-btn">{t('viewCabinet', uiLang)}</Link>
         </div>
       ) : (
         <div className="cg-clear-banner">
@@ -314,6 +315,8 @@ export function CaregiverDashboard() {
           </div>
         </div>
       </div>
+
+      <Disclaimer />
 
       <style>{`
         .cg-dash-root { padding:24px 20px;max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:24px; }

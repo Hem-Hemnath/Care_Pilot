@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Send, Mic, MicOff, Paperclip, Link as LinkIcon } from 'lucide-react'
 import { useApp } from '../hooks/useApp'
 import { t } from '../i18n'
@@ -75,11 +75,12 @@ export function BottomInputBar({
 
     setVoiceState('listening')
 
+    let latestTranscript = ''
     await voiceService.startListening(
       uiLang,
       (transcript) => {
-        setVoiceState('idle')
         if (transcript) {
+          latestTranscript = transcript
           setText(transcript)
           textareaRef.current?.focus()
         }
@@ -103,6 +104,11 @@ export function BottomInputBar({
       },
       () => {
         setVoiceState('idle')
+        if (latestTranscript.trim()) {
+          const lang = detectLanguage(latestTranscript.trim())
+          onSend(latestTranscript.trim(), lang)
+          setText('')
+        }
       }
     )
   }
@@ -150,7 +156,7 @@ export function BottomInputBar({
         {/* Text area */}
         <textarea
           ref={textareaRef}
-          className="bib-textarea"
+          className="bib-textarea input-3d"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}

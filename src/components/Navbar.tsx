@@ -11,7 +11,6 @@ import type { Language, Theme } from '../types'
 const langOptions = [
   { value: 'en', label: 'English' },
   { value: 'ta', label: 'தமிழ்' },
-  { value: 'tanglish', label: 'Tanglish' },
 ]
 
 const themeOptions = [

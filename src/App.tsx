@@ -96,14 +96,6 @@ function AppInner() {
             }
           />
           <Route
-            path="/caregiver/safety-checker"
-            element={
-              <RoleGuard allowedRoles={['caregiver']}>
-                <SafetyPage />
-              </RoleGuard>
-            }
-          />
-          <Route
             path="/caregiver/compare"
             element={
               <RoleGuard allowedRoles={['caregiver']}>
@@ -145,14 +137,6 @@ function AppInner() {
               </RoleGuard>
             }
           />
-          <Route
-            path="/patient/safety"
-            element={
-              <RoleGuard allowedRoles={['patient']}>
-                <SafetyPage />
-              </RoleGuard>
-            }
-          />
 
           {/* Common Protected / Utility Routes */}
           <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
@@ -162,7 +146,6 @@ function AppInner() {
           {/* Legacy Aliases */}
           <Route path="/dashboard" element={<RootRedirect />} />
           <Route path="/cabinet" element={<CabinetPage />} />
-          <Route path="/safety" element={<SafetyPage />} />
           <Route path="/prescriptions" element={<PrescriptionScannerPage />} />
           <Route path="/comparator" element={<StripComparatorPage />} />
 

@@ -1,19 +1,8 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { getGeminiClient } from '../config/apiConfig'
 import type { StripComparisonResult } from '../types'
-
-const API_KEY =
-  import.meta.env.VITE_GEMINI_API_KEY ||
-  (typeof process !== 'undefined'
-    ? process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY
-    : '') || ''
 
 const MODEL_NAME = 'gemini-2.5-flash'
 const TIMEOUT_MS = 15000
-
-function getClient() {
-  if (!API_KEY) throw new Error('Gemini API key not configured in .env file.')
-  return new GoogleGenerativeAI(API_KEY)
-}
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   const timeout = new Promise<never>((_, reject) =>
@@ -35,7 +24,7 @@ export async function compareStripWithPrescription(
   const mimeType = stripImageBase64.startsWith('data:image/png') ? 'image/png' : 'image/jpeg'
 
   try {
-    const genAI = getClient()
+    const genAI = getGeminiClient()
     const model = genAI.getGenerativeModel({ model: MODEL_NAME })
 
     const prompt = `You are an expert medicine verification assistant comparing a medicine strip photo against a prescription entry.

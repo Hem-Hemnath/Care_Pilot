@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Send, Mic, MicOff, Paperclip } from 'lucide-react'
 import { useApp } from '../hooks/useApp'
 import { t } from '../i18n'
@@ -55,14 +55,14 @@ export function ChatInput({ onSend, disabled, onFileSelected }: ChatInputProps) 
       return
     }
     setIsListening(true)
+    let latestTranscript = ''
     voiceService.startListening(
       uiLang,
       (transcript) => {
-        setText(transcript)
-        setIsListening(false)
-        const lang = detectLanguage(transcript)
-        onSend(transcript, lang)
-        setText('')
+        if (transcript) {
+          latestTranscript = transcript
+          setText(transcript)
+        }
       },
       (code, msg) => {
         setIsListening(false)
@@ -74,7 +74,14 @@ export function ChatInput({ onSend, disabled, onFileSelected }: ChatInputProps) 
           setVoiceError(msg)
         }
       },
-      () => setIsListening(false)
+      () => {
+        setIsListening(false)
+        if (latestTranscript.trim()) {
+          const lang = detectLanguage(latestTranscript.trim())
+          onSend(latestTranscript.trim(), lang)
+          setText('')
+        }
+      }
     )
   }
 
@@ -110,7 +117,7 @@ export function ChatInput({ onSend, disabled, onFileSelected }: ChatInputProps) 
         />
         <textarea
           ref={textareaRef}
-          className="chat-textarea"
+          className="chat-textarea input-3d"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}

@@ -14,7 +14,6 @@ import type { Language, Theme } from '../types'
 const langOptions = [
   { value: 'en', label: 'English' },
   { value: 'ta', label: 'தமிழ்' },
-  { value: 'tanglish', label: 'Tanglish' },
 ]
 
 const themeOptions = [
@@ -209,16 +208,6 @@ export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
                 </NavLink>
 
                 <NavLink
-                  to="/caregiver/safety-checker"
-                  className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}
-                  title={t('safety', uiLang)}
-                >
-                  <Shield size={19} className="item-icon" />
-                  {!isIconOnly && <span className="item-text">{t('safety', uiLang)}</span>}
-                  <span className="sidebar-tooltip">{t('safety', uiLang)}</span>
-                </NavLink>
-
-                <NavLink
                   to="/caregiver/compare"
                   className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}
                   title={t('comparator', uiLang)}
@@ -278,16 +267,6 @@ export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
                   <FileText size={19} className="item-icon" />
                   {!isIconOnly && <span className="item-text">My Prescriptions</span>}
                   <span className="sidebar-tooltip">My Prescriptions</span>
-                </NavLink>
-
-                <NavLink
-                  to="/patient/safety"
-                  className={({ isActive }) => `sidebar-item ${isActive ? 'active' : ''}`}
-                  title="Safety Status"
-                >
-                  <Shield size={19} className="item-icon" />
-                  {!isIconOnly && <span className="item-text">Safety Status</span>}
-                  <span className="sidebar-tooltip">Safety Status</span>
                 </NavLink>
 
                 <NavLink

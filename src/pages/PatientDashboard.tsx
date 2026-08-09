@@ -9,6 +9,7 @@ import { performSafetyCheck } from '../services/safetyService'
 import { voiceService } from '../voice/voiceService'
 import { askAboutMedicine } from '../ai/geminiService'
 import { cabinetMedicineToMedicineRecord } from '../utils/medicineAdapter'
+import { Disclaimer } from '../components/Disclaimer'
 import type { CabinetMedicine, SafetyCheckResult, MedicineRecord } from '../types'
 
 export function PatientDashboard() {
@@ -195,6 +196,8 @@ export function PatientDashboard() {
           <span>{t('viewDigitalCabinet', uiLang)}</span>
         </Link>
       </div>
+
+      <Disclaimer />
 
       <style>{`
         .pt-dash-root { padding:24px 20px;max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px; }

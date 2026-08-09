@@ -119,10 +119,11 @@ export function PatientsPage() {
             <p className="modal-sub">Add a family member or patient under your caregiver management.</p>
 
             <form onSubmit={handleAddPatient} className="modal-form">
-              <div className="field-group">
+              <div className="field-group input-3d-wrapper">
                 <label>Patient Full Name *</label>
                 <input
                   type="text"
+                  className="input-3d"
                   placeholder="e.g. Ramanan (Father)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -130,20 +131,22 @@ export function PatientsPage() {
                 />
               </div>
 
-              <div className="field-group">
+              <div className="field-group input-3d-wrapper">
                 <label>Age (years)</label>
                 <input
                   type="number"
+                  className="input-3d"
                   placeholder="e.g. 72"
                   value={age}
                   onChange={(e) => setAge(e.target.value === '' ? '' : Number(e.target.value))}
                 />
               </div>
 
-              <div className="field-group">
+              <div className="field-group input-3d-wrapper">
                 <label>Medical Conditions (comma-separated)</label>
                 <input
                   type="text"
+                  className="input-3d"
                   placeholder="e.g. Diabetes, Hypertension, Thyroid"
                   value={conditionsText}
                   onChange={(e) => setConditionsText(e.target.value)}

@@ -141,38 +141,82 @@ img { max-width: 100%; height: auto; }
   border-color: var(--accent);
 }
 
-/* ── Global 3D Input Depth & Hover Effects ── */
-input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
-textarea,
-.sp-url-input,
-.bib-textarea {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* ── Interactive Responsive 3D Input System ── */
+.input-3d-wrapper,
+.field-group,
+.modal-form .field-group,
+.modal-card,
+.modal-form,
+.cabinet-search-wrapper,
+.chat-input-wrap,
+.bib-outer,
+.pt-text-fallback,
+.chat-input-bar {
+  perspective: 1200px !important;
+  transform-style: preserve-3d !important;
+}
+
+.input-3d,
+.field-group input,
+.field-group select,
+.field-group textarea,
+.modal-form input,
+.modal-form select,
+.modal-form textarea,
+.cabinet-search-box,
+.bib-textarea,
+.chat-input-box,
+.pt-text-fallback input,
+.chat-input-bar input {
   transform-style: preserve-3d;
+  transform: translateZ(0) rotateX(0deg);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+  will-change: transform, box-shadow, border-color;
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):hover,
-textarea:hover,
-.sp-url-input:hover,
-.bib-textarea:hover {
-  transform: translateY(-2px) scale(1.01) !important;
-  border-color: var(--accent) !important;
-  box-shadow: 0 8px 20px -6px rgba(14, 165, 233, 0.25) !important;
+.input-3d:hover,
+.field-group input:hover,
+.field-group select:hover,
+.field-group textarea:hover,
+.modal-form input:hover,
+.modal-form select:hover,
+.modal-form textarea:hover,
+.cabinet-search-box:hover,
+.bib-textarea:hover,
+.chat-input-box:hover,
+.pt-text-fallback input:hover,
+.chat-input-bar input:hover {
+  transform: translateZ(10px) rotateX(1.5deg) !important;
+  border-color: rgba(20, 184, 166, 0.4) !important;
+  box-shadow: 0 10px 25px -4px rgba(20, 184, 166, 0.15) !important;
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
-textarea:focus,
-.sp-url-input:focus,
-.bib-textarea:focus {
-  transform: translateY(-3px) scale(1.015) !important;
-  border-color: var(--accent) !important;
-  box-shadow: 0 12px 28px -4px rgba(14, 165, 233, 0.35), 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
+.input-3d:focus,
+.input-3d:focus-within,
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus,
+.modal-form input:focus,
+.modal-form select:focus,
+.modal-form textarea:focus,
+.cabinet-search-box:focus-within,
+.bib-textarea:focus,
+.chat-input-box:focus-within,
+.pt-text-fallback input:focus,
+.chat-input-bar input:focus {
+  transform: translateZ(20px) scale(1.01) rotateX(0deg) !important;
+  border-color: rgba(20, 184, 166, 1) !important;
+  outline: none;
+  box-shadow: 0 15px 35px -3px rgba(20, 184, 166, 0.3), 0 0 0 3px rgba(45, 212, 191, 0.2) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .glass-card, .glass-card:hover,
-  input, textarea, .sp-url-input, .bib-textarea {
+  .input-3d-wrapper, .field-group, .input-3d,
+  input, textarea, select {
     transform: none !important;
     transition: none !important;
   }
 }
+
 

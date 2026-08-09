@@ -1,22 +1,11 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { getGeminiClient } from '../config/apiConfig'
 import type { MedicineRecord, AnalysisResult } from '../types'
 import { findMedicineByName } from '../dataset/medicineService'
 import { getLangInstruction } from '../utils/languageDetect'
 import type { Language } from '../types'
 
-const API_KEY =
-  import.meta.env.VITE_GEMINI_API_KEY ||
-  (typeof process !== 'undefined'
-    ? process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY
-    : '') || ''
-
 const MODEL_NAME = 'gemini-2.5-flash'
 const TIMEOUT_MS = 15000
-
-function getClient() {
-  if (!API_KEY) throw new Error('Gemini API key not configured. Add VITE_GEMINI_API_KEY or GEMINI_API_KEY to your .env file.')
-  return new GoogleGenerativeAI(API_KEY)
-}
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   const timeout = new Promise<never>((_, reject) =>
@@ -30,7 +19,7 @@ export async function identifyMedicineFromImage(imageBase64: string): Promise<An
   const mimeType = imageBase64.startsWith('data:image/png') ? 'image/png' : 'image/jpeg'
 
   try {
-    const genAI = getClient()
+    const genAI = getGeminiClient()
     const model = genAI.getGenerativeModel({ model: MODEL_NAME })
 
     const prompt = `You are an expert medical OCR assistant. Analyze this medicine image (strip, label, box, or prescription). Extract whatever medicine name, dosage, or active ingredient is legible. If fuzzy, return your best estimated match with a list of missing details instead of throwing a confidence error.
@@ -118,20 +107,20 @@ export async function askAboutMedicine(
   const langInstruction = getLangInstruction(lang)
 
   const datasetContext = `
-Medicine Name: ${medicine.medicineName}
+Active Medicine Name: ${medicine.medicineName}
 Composition: ${medicine.composition || 'Not available'}
 Uses: ${medicine.uses || 'Not available'}
 Side Effects: ${medicine.sideEffects || 'Not available'}
 Manufacturer: ${medicine.manufacturer || 'Not available'}
 `.trim()
 
-  const systemPrompt = `You are CarePilot, a helpful medicine information assistant.
-You have verified information about the medicine. Use it to answer.
+  const systemPrompt = `You are CarePilot AI. Respond strictly in the user's selected language: either clear, natural Tamil (தமிழ்) or standard English. Do not mix languages or use Romanized Tamil.
+You have verified information about the active medication (${medicine.medicineName}). Answer specific queries about ${medicine.medicineName} using this context.
 ${langInstruction}
 IMPORTANT: Never fabricate medical information. If information is unavailable, say so clearly.
 Always include a brief disclaimer that users should consult a doctor.
 
-Information for ${medicine.medicineName}:
+Information for active medicine "${medicine.medicineName}":
 ${datasetContext}`
 
   const history = conversationHistory.slice(-8).map((m) => ({
@@ -140,21 +129,20 @@ ${datasetContext}`
   }))
 
   try {
-    const genAI = getClient()
+    const genAI = getGeminiClient()
     const model = genAI.getGenerativeModel({
       model: MODEL_NAME,
       systemInstruction: systemPrompt,
     })
     const chat = model.startChat({ history })
-    const result = await withTimeout(chat.sendMessage(question), TIMEOUT_MS)
+    const contextualQuestion = `Regarding the medicine "${medicine.medicineName}": ${question}`
+    const result = await withTimeout(chat.sendMessage(contextualQuestion), TIMEOUT_MS)
     return result.response.text()
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     if (msg.includes('timed out')) {
       return lang === 'ta'
         ? 'மன்னிக்கவும், பதில் வர அதிக நேரம் ஆகிறது. மீண்டும் முயற்சிக்கவும்.'
-        : lang === 'tanglish'
-        ? 'Sorry, response late aaguthu. Meedum try pannunga.'
         : 'Sorry, the response took too long. Please try again.'
     }
     if (msg.includes('API key')) return 'Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.'
@@ -169,7 +157,7 @@ export async function identifyMedicineFromText(text: string): Promise<AnalysisRe
   }
 
   try {
-    const genAI = getClient()
+    const genAI = getGeminiClient()
     const model = genAI.getGenerativeModel({ model: MODEL_NAME })
     const prompt = `Extract the medicine name from this text: "${text}"
 Respond in JSON format (no markdown):
