@@ -11,6 +11,7 @@ import {
   logDoseTaken,
 } from '../services/cabinetService'
 import type { CabinetMedicine } from '../types'
+import type { CaptureResult } from '../camera/cameraService'
 import { CameraCapture } from '../components/CameraCapture'
 import { identifyMedicineFromImage } from '../ai/geminiService'
 
@@ -76,19 +77,27 @@ export function CabinetPage() {
     setShowModal(true)
   }
 
-  const handleCameraCapture = async (fileOrBase64: File | string) => {
+  const handleCameraCapture = async (result: CaptureResult | string | File) => {
     setShowCamera(false)
     setIsScanning(true)
     try {
+      let fileToRead: File | null = null
       let base64Str = ''
-      if (typeof fileOrBase64 === 'string') {
-        base64Str = fileOrBase64
-      } else {
+
+      if (typeof result === 'string') {
+        base64Str = result
+      } else if (result instanceof File) {
+        fileToRead = result
+      } else if (result && typeof result === 'object' && 'file' in result) {
+        fileToRead = (result as CaptureResult).file
+      }
+
+      if (fileToRead) {
         base64Str = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader()
           reader.onload = () => resolve(reader.result as string)
           reader.onerror = reject
-          reader.readAsDataURL(fileOrBase64)
+          reader.readAsDataURL(fileToRead!)
         })
       }
 

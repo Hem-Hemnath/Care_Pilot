@@ -15,7 +15,7 @@ interface MedicineProfileProps {
 
 function InfoSection({ label, value }: { label: string; value: string }) {
   const { uiLang } = useApp()
-  const display = value && value.trim() ? value : t('noInfo', uiLang as 'en' | 'ta' | 'tanglish')
+  const display = value && value.trim() ? value : t('noInfo', uiLang)
   return (
     <div className="profile-section">
       <div className="profile-label">{label}</div>

@@ -45,7 +45,7 @@ export class VoiceService {
     return !!(
       window.SpeechRecognition ||
       window.webkitSpeechRecognition ||
-      (typeof navigator !== 'undefined' && navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== 'undefined')
+      (typeof navigator !== 'undefined' && typeof navigator.mediaDevices?.getUserMedia === 'function' && typeof MediaRecorder !== 'undefined')
     )
   }
 
@@ -79,7 +79,7 @@ export class VoiceService {
 
     if (SpeechRec) {
       try {
-        if (navigator.mediaDevices?.getUserMedia) {
+        if (typeof navigator.mediaDevices?.getUserMedia === 'function') {
           try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
             this.micStream = stream
@@ -151,7 +151,7 @@ export class VoiceService {
     }
 
     // MediaRecorder Fallback if WebSpeech is not available or throws error
-    if (navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== 'undefined') {
+    if (typeof navigator.mediaDevices?.getUserMedia === 'function' && typeof MediaRecorder !== 'undefined') {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
         this.micStream = stream

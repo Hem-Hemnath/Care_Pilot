@@ -1,13 +1,17 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
+declare const process: { env?: { [key: string]: string | undefined } }
+
 /**
  * Resolves the Gemini API key strictly from environment variables across Vite, Next.js, and Node.js environments.
  */
 const getApiKey = (): string => {
-  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) {
-    return import.meta.env.VITE_GEMINI_API_KEY
+  const metaEnv = (import.meta as unknown as { env?: Record<string, string> })?.env
+  const viteKey = metaEnv?.VITE_GEMINI_API_KEY || metaEnv?.GEMINI_API_KEY
+  if (viteKey) {
+    return viteKey
   }
-  if (typeof process !== 'undefined' && process.env) {
+  if (typeof process !== 'undefined' && process?.env) {
     return (
       process.env.GEMINI_API_KEY ||
       process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
