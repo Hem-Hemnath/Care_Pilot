@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # <!-- Team name --> · Tech for Good 2026
 
 Team repository for **Build with AI: Code for Communities** — GDG Coimbatore
@@ -28,32 +27,3 @@ progress. Organizers follow along through this repo, so keep it active.
 Questions? Ping the organizers in the mixer WhatsApp group or open an issue.
 
 — GDG Coimbatore · TiE Kovai Con · GRD College · Startup Culture
-=======
-﻿# CarePilot
-
-AI-powered medicine information assistant.
-
-## Quick Start
-
-1. `npm install`
-2. Copy `.env.example` to `.env` and add your `VITE_GEMINI_API_KEY`
-3. `npm run dev`
-4. Load your medicine dataset (XLSX) via Settings
-
-## Build
-`npm run build`
-
-## Dataset Columns Required
-- Medicine Name, Composition, Uses, Side_effects, Image URL, Manufacturer, Excellent Review %, Average Review %, Poor Review %
-
-## Deploy
-Vercel: Push to GitHub, import repo, set VITE_GEMINI_API_KEY env var.
-
-## Android APK (Capacitor)
-`npm install @capacitor/core @capacitor/cli @capacitor/android`
-`npx cap init CarePilot com.carepilot.app`
-`npm run build && npx cap add android && npx cap sync && npx cap open android`
-
-## Safety
-CarePilot never guesses a medicine. Not a replacement for a doctor or pharmacist.
->>>>>>> 2a0788b (Add CarePilot project source code)
